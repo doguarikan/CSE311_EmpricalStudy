@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <time.h>
+#include <sys/time.h>
+#include <string.h>
 
 /////bubble sort/////
 
@@ -38,7 +39,7 @@ void bubble_improved(int *arr, int n)
             }
         }
         if(!swapped)
-            break ;
+            break;
     }
 }
 
@@ -82,6 +83,7 @@ int partition(int *arr, int low, int high)
     int temp = arr[i + 1];
     arr[i + 1] = arr[high];
     arr[high] = temp;
+    return i + 1;
 }
 
 void quick_sort(int *arr, int low, int high)
@@ -93,14 +95,25 @@ void quick_sort(int *arr, int low, int high)
         quick_sort(arr, low, pivot - 1);
         quick_sort(arr, pivot + 1, high);
     }
-
 }
 
 /////improved quick sort/////
 
-void quick_improved(int *arr, int n)
+void quick_improved(int *arr, int low, int high)
 {
-
+    if (high - low + 1 <= 20)
+    {
+        selection_sort(arr + low, high - low + 1);
+    }
+    else
+    {
+        if (low < high)
+        {
+            int pivot = partition(arr, low, high);
+            quick_improved(arr, low, pivot - 1);
+            quick_improved(arr, pivot + 1, high);
+        }
+    }
 }
 
 /////merge sort/////
@@ -110,7 +123,8 @@ void merge(int *arr, int left, int mid, int right)
     int i, j, k;
     int n1 = mid - left + 1;
     int n2 = right - mid;
-    int L[n1], R[n2];
+    int *L = (int *)malloc(n1 * sizeof(int));
+    int *R = (int *)malloc(n2 * sizeof(int));
 
     for (i = 0; i < n1; i++)
         L[i] = arr[left + i];
@@ -144,7 +158,11 @@ void merge(int *arr, int left, int mid, int right)
         j++;
         k++;
     }
+
+    free(L);
+    free(R);
 }
+
 
 void merge_sort(int *arr, int left, int right)
 {
@@ -159,52 +177,109 @@ void merge_sort(int *arr, int left, int right)
 
 /////radix sort/////
 
-int getMax(int arr[], int n) {
-    int mx = arr[0];
-    for (int i = 1; i < n; i++)
-        if (arr[i] > mx)
-            mx = arr[i];
-    return mx;
-}
+void counting_sort(int array[], int size, int place) {
+    int *output = malloc(size * sizeof(int));
+    int count[10] = {0};
 
-// A function to do counting sort of arr[] 
-// according to the digit represented by exp
-void countSort(int arr[], int n, int exp) {
-    int output[n]; // Output array
-    int count[10] = {0}; // Initialize count array as 0
-
-    // Store count of occurrences in count[]
-    for (int i = 0; i < n; i++)
-        count[(arr[i] / exp) % 10]++;
-
-    // Change count[i] so that count[i] now 
-    // contains actual position of this digit
-    // in output[]
-    for (int i = 1; i < 10; i++)
-        count[i] += count[i - 1];
-
-    // Build the output array
-    for (int i = n - 1; i >= 0; i--)
-    {
-        output[count[(arr[i] / exp) % 10] - 1] = arr[i];
-        count[(arr[i] / exp) % 10]--;
+    for (int i = 0; i < size; i++) {
+        int index = (array[i] / place) % 10;
+        count[index]++;
     }
 
-    // Copy the output array to arr[], 
-    // so that arr[] now contains sorted 
-    // numbers according to current digit
-    for (int i = 0; i < n; i++)
-        arr[i] = output[i];
+    for (int i = 1; i < 10; i++) {
+        count[i] += count[i - 1];
+    }
+
+    for (int i = size - 1; i >= 0; i--) {
+        int index = (array[i] / place) % 10;
+        output[count[index] - 1] = array[i];
+        count[index]--;
+    }
+
+    for (int i = 0; i < size; i++) {
+        array[i] = output[i];
+    }
+
+    free(output);
 }
 
-void radix_sort(int *arr, int n)
-{
-    int m = getMax(arr, n); 
-    for (int exp = 1; m / exp > 0; exp *= 10)
-        countSort(arr, n, exp);
+void radix_sort(int array[], int size) {
+    int max = array[0];
+    for (int i = 1; i < size; i++) {
+        if (array[i] > max) {
+            max = array[i];
+        }
+    }
+
+    for (int place = 1; max / place > 0; place *= 10) {
+        counting_sort(array, size, place);
+    }
 }
+
 
 int main()
-{
+{   
+    FILE *file= fopen("input.txt", "r");
+    int target = 56500000;
+    int *numbers = malloc(target * sizeof(int));
+    int *copy = malloc(target * sizeof(int));
 
+    for(int i = 0; i < target; i++)
+    {
+        fscanf(file, "%d", &numbers[i]);
+    }
+    
+    struct timeval start, end;
+    double taken_time;
+/*
+    memcpy(copy, numbers, target * sizeof(int));
+    gettimeofday(&start, NULL);
+    bubble_sort(copy, target);
+    gettimeofday(&end, NULL);
+    taken_time = (end.tv_sec - start.tv_sec) + (end.tv_usec - start.tv_usec) / 1e6;
+    printf("bubble sort taken time %.6lf sec\n", taken_time);
+
+    memcpy(copy, numbers, target * sizeof(int));
+    gettimeofday(&start, NULL);
+    bubble_improved(copy, target);
+    gettimeofday(&end, NULL);
+    taken_time = (end.tv_sec - start.tv_sec) + (end.tv_usec - start.tv_usec) / 1e6;
+    printf("improved sort bubble taken time %.6lf sec\n", taken_time);
+
+    memcpy(copy, numbers, target * sizeof(int));
+    gettimeofday(&start, NULL);
+    selection_sort(copy, target);
+    gettimeofday(&end, NULL);
+    taken_time = (end.tv_sec - start.tv_sec) + (end.tv_usec - start.tv_usec) / 1e6;
+    printf("selection sort taken time %.6lf sec\n", taken_time);
+
+    memcpy(copy, numbers, target * sizeof(int));
+    gettimeofday(&start, NULL);
+    quick_sort(copy, 0, target - 1);
+    gettimeofday(&end, NULL);
+    taken_time = (end.tv_sec - start.tv_sec) + (end.tv_usec - start.tv_usec) / 1e6;
+    printf("quick sort taken time %.6lf sec\n", taken_time);
+
+    memcpy(copy, numbers, target * sizeof(int));
+    gettimeofday(&start, NULL);
+    quick_improved(copy, 0, target - 1);
+    gettimeofday(&end, NULL);
+    taken_time = (end.tv_sec - start.tv_sec) + (end.tv_usec - start.tv_usec) / 1e6;
+    printf("improved quick sort taken time %.6lf sec\n", taken_time);
+
+    memcpy(copy, numbers, target * sizeof(int));
+    gettimeofday(&start, NULL);
+    merge_sort(copy, 0, target - 1);
+    gettimeofday(&end, NULL);
+    taken_time = (end.tv_sec - start.tv_sec) + (end.tv_usec - start.tv_usec) / 1e6;
+    printf("merge sort taken time %.6lf sec\n", taken_time);
+*/
+    memcpy(copy, numbers, target * sizeof(int));
+    gettimeofday(&start, NULL);
+    radix_sort(copy, target);
+    gettimeofday(&end, NULL);
+    taken_time = (end.tv_sec - start.tv_sec) + (end.tv_usec - start.tv_usec) / 1e6;
+    printf("radix sort taken time %.6lf sec\n", taken_time);
+
+    fclose(file);
 }

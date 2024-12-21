@@ -1,0 +1,68 @@
+1k
+bubble sort taken time 0,00164675 sec
+improved sort bubble taken time 0,00164625 sec
+selection sort taken time 0,000626 sec
+quick sort taken time 0,000079 sec
+improved quick sort taken time 0,00007975 sec
+merge sort taken time 0,00011475 sec
+radix sort taken time 0,00006275 sec
+
+
+10k
+bubble sort taken time 0,100483 sec
+improved sort bubble taken time 0,101238 sec
+selection sort taken time 0,04111333 sec
+quick sort taken time 0,00071166 sec
+improved quick sort taken time 0,000744 sec
+merge sort taken time 0,001035333 sec
+radix sort taken time 0,000312 sec
+
+
+50k
+bubble sort taken time 4,561330 sec
+improved sort bubble taken time 4,598667 sec
+selection sort taken time 1,053257 sec
+quick sort taken time 0,004225 sec
+improved selection sort taken time 0,004316 sec
+merge sort taken time 0,006785 sec
+radix sort taken time 0,001707 sec
+
+
+100k
+bubble sort taken time 18,65393567 sec
+improved sort bubble taken time 18,72940233 sec
+selection sort taken time 4,09291 sec
+quick sort taken time 0,0086116667 sec
+improved quick sort taken time 0,009134 sec
+merge sort taken time 0,0127973333 sec
+radix sort taken time 0,00335366667 sec
+
+
+250k
+bubble sort taken time 117,978571333 sec
+improved sort bubble taken time 118,019578 sec
+selection sort taken time 25,023804 sec
+quick sort taken time 0,022400333 sec
+improved quick sort taken time 0,023764 sec
+merge sort taken time 0,03315 sec
+radix sort taken time 0,008625333 sec
+
+
+500k
+bubble sort taken time 478,509948 sec
+improved sort bubble taken time 479,1135796666667 sec
+selection sort taken time 101,076381 sec
+quick sort taken time 0,0461676666666667 sec
+improved quick sort taken time 0,0465353333333333 sec
+merge sort taken time 0,0702626666666667 sec
+radix sort taken time 0,017448 sec
+
+
+1M
+bubble sort taken time 1935,009110 sec
+improved sort bubble taken time 1933,078215 sec
+selection sort taken time 401,040373 sec
+quick sort taken time 0,094267 sec
+improved quick sort taken time 0,092457 sec
+merge sort taken time 0,159301 sec
+radix sort taken time 0,032863 sec
