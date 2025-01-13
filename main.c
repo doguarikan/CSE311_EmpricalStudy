@@ -220,7 +220,7 @@ void radix_sort(int array[], int size) {
 int main()
 {   
     FILE *file= fopen("input.txt", "r");
-    int target = 56500000;
+    int target = 5000;
     int *numbers = malloc(target * sizeof(int));
     int *copy = malloc(target * sizeof(int));
 
@@ -231,7 +231,7 @@ int main()
     
     struct timeval start, end;
     double taken_time;
-/*
+
     memcpy(copy, numbers, target * sizeof(int));
     gettimeofday(&start, NULL);
     bubble_sort(copy, target);
@@ -273,7 +273,7 @@ int main()
     gettimeofday(&end, NULL);
     taken_time = (end.tv_sec - start.tv_sec) + (end.tv_usec - start.tv_usec) / 1e6;
     printf("merge sort taken time %.6lf sec\n", taken_time);
-*/
+
     memcpy(copy, numbers, target * sizeof(int));
     gettimeofday(&start, NULL);
     radix_sort(copy, target);
